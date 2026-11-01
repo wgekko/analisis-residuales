@@ -1,7 +1,7 @@
 #  Terminal Avanzada de Análisis Econométrico y Residuales
 
 Una aplicación web interactiva desarrollada en **Python** y **Streamlit** orientada al análisis financiero, modelado de series temporales y auditoría de residuales (ruido blanco). Diseñada bajo buenas prácticas de ingeniería de software para científicos de datos y analistas financieros.
-
+Lo que se busca es determinar los patrones NO aleatorios, en la evolución de una variable para obtener datos mas descriptivos del comportamiento o evolución de esa variable, disminuyendo el riesgo del sesgo de datos para aplicarlos a los modelos predictivos o estadísticos
 ---
 
 ##  Características Principales
@@ -103,5 +103,20 @@ dataframeHeaderBackgroundColor = "#1A2A40"
 
 1. Clona este repositorio:
    ```bash
-   git clone [https://github.com/tu-usuario/tu-repositorio.git](https://github.com/tu-usuario/tu-repositorio.git)
+   git clone [https://github.com/wgekko/analisis-residuales.git](https://github.com/wgekko/analisis-residuales.git)
    cd tu-repositorio
+    analisis-residuales
+
+
+
+
+video demo
+
+
+https://github.com/user-attachments/assets/54428f38-f4bf-4c15-b49b-1aeb1744906b
+
+
+
+
+
+   
