@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Quantitative Analysis - Matrix Cinematic Intro" />
+
+    <title>QUANTITATIVE  ANALYSIS - Matrix Intro</title>
+
+    <!-- FUENTE -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet">
+
+    <style>
+        :root{
+            --duration: 16s;
+            --primary: #5eff77;
+            --primary-glow: rgba(94, 255, 119, 0.4);
+            --bg-radial: radial-gradient(circle at center, #081108 0%, #020402 45%, #000000 100%);
+        }
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body{
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            background: var(--bg-radial);
+            position: relative;
+        }
+
+        /* =========================================
+           MATRIX RAIN (CANVAS OPTIMIZED)
+        ==========================================*/
+        .matrix-rain {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #matrix-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            opacity: 0.18;
+        }
+
+        /* =========================================
+           WRAPPER (3D COMPOSITING LAYER)
+        ==========================================*/
+        .cinematic-wrapper {
+            position: relative;
+            width: min(1300px, 100vw);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform-origin: center;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            z-index: 2;
+            will-change: transform, opacity;
+            animation: cinematicIntro var(--duration) cubic-bezier(.7,0,.3,1) infinite;
+            margin-bottom: max(30px, calc((100vw - min(1300px, 100vw)) / 2));
+        }
+
+        @keyframes cinematicIntro {
+            0% {
+                opacity: 0;
+                transform: scale(.96) translateY(10px);
+                filter: brightness(0) blur(10px);
+            }
+            10% {
+                opacity: .06;
+            }
+            18% {
+                opacity: .28;
+                filter: brightness(.22) blur(6px);
+            }
+            28% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: brightness(.9) blur(0px);
+            }
+            45% {
+                opacity: 1;
+                filter: brightness(1.2);
+            }
+            70% {
+                opacity: .96;
+                transform: scale(1.01);
+            }
+            85% {
+                opacity: .4;
+                filter: brightness(.3) blur(2px);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.035) translateY(-4px);
+                filter: brightness(0) blur(8px);
+            }
+        }
+
+        /* =========================================
+           SVG OPTIMIZED RENDERING
+        ==========================================*/
+        svg {
+            width: 100%;
+            height: auto;
+            overflow: visible;
+            transform-style: preserve-3d;
+            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+            will-change: transform;
+            /* Combined drop-shadow for performance optimization (only 2 blurs instead of 4) */
+            filter: 
+                drop-shadow(0 0 15px rgba(94, 255, 119, 0.2))
+                drop-shadow(0 15px 25px rgba(0, 0, 0, 0.9));
+        }
+
+        text {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            text-rendering: geometricPrecision;
+        }
+
+        .dark-layer {
+            opacity: .30;
+        }
+
+        .metal-layer {
+            opacity: 1;
+        }
+
+        .reflection-layer {
+            opacity: 1;
+        }
+
+        /* =========================================
+           DIGITAL FLICKER
+        ==========================================*/
+        .metal-layer text {
+            animation: digitalFlicker 5s infinite;
+        }
+
+        @keyframes digitalFlicker {
+            0%, 100% { opacity: 1; }
+            2% { opacity: .94; }
+            4% { opacity: 1; }
+            7% { opacity: .96; }
+            9% { opacity: 1; }
+            52% { opacity: .98; }
+            54% { opacity: .92; }
+            56% { opacity: 1; }
+        }
+
+        /* =========================================
+           ENTER BUTTON WITH MICRO-ANIMATIONS
+        ==========================================*/
+        .btn-container {
+            margin-top: 0px;
+            opacity: 0.9;
+            transform-style: preserve-3d;
+            transform: translateZ(20px); /* Gives a 3D pop effect */
+        }
+
+        .enter-btn {
+            display: inline-block;
+            padding: 14px 36px;
+            background: rgba(0, 255, 100, 0.04);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 0 15px rgba(0, 255, 100, 0.1);
+        }
+
+        .enter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(94, 255, 119, 0.25),
+                transparent
+            );
+            transition: 0.6s ease;
+        }
+
+        .enter-btn:hover::before {
+            left: 100%;
+        }
+
+        .enter-btn:hover {
+            background: var(--primary);
+            color: #020402;
+            box-shadow: 0 0 25px rgba(94, 255, 119, 0.45);
+            text-shadow: none;
+            transform: scale(1.03);
+        }
+
+        .enter-btn:active {
+            transform: scale(0.98);
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- MATRIX RAIN -->
+    <div class="matrix-rain">
+        <canvas id="matrix-canvas"></canvas>
+    </div>
+
+    <!-- LOGO & INTERFACE -->
+    <main class="cinematic-wrapper">
+
+        <svg
+            viewBox="0 0 1400 520"
+            xmlns="http://www.w3.org/2000/svg">
+
+            <defs>
+                <!-- CURVA AJUSTADA MÁS SUAVE PARA TEXTO LARGO -->
+                <path
+                    id="arcPath"
+                    d="M 180 310 Q 700 215 1220 310" />
+
+                <!-- METAL MATRIX GRADIENT -->
+                <linearGradient
+                    id="metalDark"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%">
+                    <stop offset="0%" stop-color="#071807"/>
+                    <stop offset="10%" stop-color="#0e300e"/>
+                    <stop offset="24%" stop-color="#5dff78"/>
+                    <stop offset="36%" stop-color="#124512"/>
+                    <stop offset="50%" stop-color="#effff1"/>
+                    <stop offset="64%" stop-color="#0d380d"/>
+                    <stop offset="78%" stop-color="#7bff8d"/>
+                    <stop offset="90%" stop-color="#124012"/>
+                    <stop offset="100%" stop-color="#071807"/>
+                </linearGradient>
+
+                <!-- CHROME EDGE GRADIENT -->
+                <linearGradient
+                    id="chromeEdge"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="14%" stop-color="#7bff8f"/>
+                    <stop offset="28%" stop-color="#134013"/>
+                    <stop offset="40%" stop-color="#effff1"/>
+                    <stop offset="54%" stop-color="#0b2a0b"/>
+                    <stop offset="70%" stop-color="#66ff7f"/>
+                    <stop offset="84%" stop-color="#173817"/>
+                    <stop offset="100%" stop-color="#ffffff"/>
+                </linearGradient>
+
+                <!-- MATRIX GLOW GRADIENT -->
+                <linearGradient
+                    id="matrixGlow"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="0%">
+                    <stop offset="0%" stop-color="#00ff66"/>
+                    <stop offset="25%" stop-color="#6dff7d"/>
+                    <stop offset="50%" stop-color="#ffffff"/>
+                    <stop offset="75%" stop-color="#6dff7d"/>
+                    <stop offset="100%" stop-color="#00ff66"/>
+                </linearGradient>
+
+                <!-- LIGHT SWEEP GRADIENT -->
+                <linearGradient
+                    id="lightSweep"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="0%">
+                    <stop offset="0%" stop-color="rgba(255,255,255,0)" />
+                    <stop offset="42%" stop-color="rgba(255,255,255,0)" />
+                    <stop offset="50%" stop-color="rgba(120,255,140,.95)" />
+                    <stop offset="58%" stop-color="rgba(255,255,255,0)" />
+                    <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+                </linearGradient>
+
+                <!-- MASK -->
+                <mask id="movingMask">
+                    <rect width="1400" height="520" fill="black"/>
+                    <rect x="-400" y="0" width="260" height="520" fill="url(#lightSweep)">
+                        <animate
+                            attributeName="x"
+                            from="-400"
+                            to="1700"
+                            dur="5s"
+                            repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="-400" y="0" width="90" height="520" fill="white" opacity=".25">
+                        <animate
+                            attributeName="x"
+                            from="-400"
+                            to="1700"
+                            dur="5s"
+                            begin=".45s"
+                            repeatCount="indefinite"/>
+                    </rect>
+                </mask>
+
+                <!-- SOFT GLOW FILTER -->
+                <filter
+                    id="softGlow"
+                    x="-40%"
+                    y="-40%"
+                    width="180%"
+                    height="180%">
+                    <feGaussianBlur stdDeviation="4" result="blur"/>
+                    <feMerge>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+
+                <!-- THIN MATRIX GLOW FILTER -->
+                <filter
+                    id="thinGlow"
+                    x="-40%"
+                    y="-40%"
+                    width="180%"
+                    height="180%">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feColorMatrix
+                        in="coloredBlur"
+                        type="matrix"
+                        values="
+                        0 0 0 0 0
+                        0 1 0 0 0
+                        0 0 0 0 0
+                        0 0 0 1 0"/>
+                    <feMerge>
+                        <feMergeNode/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- BASE -->
+            <g class="dark-layer">
+                <text
+                    font-size="45"
+                    filter="url(#softGlow)"
+                    letter-spacing="2">
+                    <textPath
+                        href="#arcPath"
+                        startOffset="50%"
+                        text-anchor="middle">
+                        <tspan
+                            fill="#0b2a0b"
+                            stroke="#37c837"
+                            stroke-width="1.8">
+                            RESIDUAL ANALYSIS
+                        </tspan>
+                    </textPath>
+                </text>
+            </g>
+
+            <!-- MAIN -->
+            <g
+                class="metal-layer"
+                mask="url(#movingMask)"
+                filter="url(#thinGlow)">
+                <text
+                    font-size="45"
+                    letter-spacing="2">
+                    <textPath
+                        href="#arcPath"
+                        startOffset="50%"
+                        text-anchor="middle">
+                        <tspan
+                            fill="url(#metalDark)"
+                            stroke="url(#matrixGlow)"
+                            stroke-width="3"
+                            paint-order="stroke fill">
+                            RESIDUAL ANALYSIS
+                        </tspan>
+                    </textPath>
+                </text>
+            </g>
+
+            <!-- REFLECTION -->
+            <g
+                class="reflection-layer"
+                mask="url(#movingMask)">
+                <text
+                    font-size="45"
+                    letter-spacing="2">
+                    <textPath
+                        href="#arcPath"
+                        startOffset="50%"
+                        text-anchor="middle">
+                        <tspan
+                            fill="none"
+                            stroke="#d7ffe1"
+                            stroke-opacity=".6"
+                            stroke-width="1">
+                            RESIDUAL ANALYSIS
+                        </tspan>
+                    </textPath>
+                </text>
+            </g>
+
+            <!-- LINEA INFERIOR -->
+            <g transform="translate(0,30)" opacity=".9">
+                <!-- Línea principal más compacta -->
+                <path
+                    d="M 420 300 Q 700 235 980 300"
+                    fill="none"
+                    stroke="url(#matrixGlow)"
+                    stroke-width="3"
+                    filter="url(#softGlow)"/>
+
+                <!-- Lateral izquierdo -->
+                <path
+                    d="M 420 300 L 420 315 L 560 315"
+                    fill="none"
+                    stroke="url(#matrixGlow)"
+                    stroke-width="2"/>
+
+                <!-- Lateral derecho -->
+                <path
+                    d="M 980 300 L 980 315 L 840 315"
+                    fill="none"
+                    stroke="url(#matrixGlow)"
+                    stroke-width="2"/>
+
+                <!-- Centro -->
+                <circle
+                    cx="700"
+                    cy="315"
+                    r="4"
+                    fill="url(#matrixGlow)"/>
+            </g>
+
+            <!-- GLOBAL SWEEP -->
+            <rect
+                x="-1400"
+                y="0"
+                width="1400"
+                height="520"
+                fill="url(#lightSweep)"
+                opacity=".18"
+                pointer-events="none">
+                <animate
+                    attributeName="x"
+                    from="-1400"
+                    to="1400"
+                    dur="6s"
+                    repeatCount="indefinite"/>
+            </rect>
+
+        </svg>
+
+        <!-- ACCESSIBILITY BUTTON -->
+        <div class="btn-container">
+            <a href="#" target="_blank" rel="noopener noreferrer" class="enter-btn" id="enter-btn">Residual Analysis Model</a>
+        </div> 
+    </main>
+
+    <!-- SCRIPTS -->
+    <script>
+        // =========================================
+        // HIGH PERFORMANCE MATRIX RAIN
+        // =========================================
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d', { alpha: false }); // Disable alpha channel for faster blending
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        const fontSize = 16;
+        let columns = Math.floor(width / fontSize) + 1;
+        let drops = [];
+        let speeds = [];
+        let streamOpacity = [];
+        let brightStream = [];
+
+        // Initialize streams
+        function initMatrix() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            columns = Math.floor(width / fontSize) + 1;
+            
+            drops = [];
+            speeds = [];
+            streamOpacity = [];
+            brightStream = [];
+
+            for (let i = 0; i < columns; i++) {
+                // Stagger starting positions above viewport
+                drops[i] = Math.random() * -100 - 20;
+                // Randomized speed per column
+                //speeds[i] = 0.8 + Math.random() * 1.5;
+                speeds[i] = 0.125 + Math.random() * 0.25;
+                // Randomized opacity for visual depth (depth layers)
+                streamOpacity[i] = 0.25 + Math.random() * 0.75;
+                // 15% chance of a highlighted bright stream
+                brightStream[i] = Math.random() < 0.15;
+            }
+        }
+        initMatrix();
+
+        // Re-initialize on resize (debounced to avoid performance hit)
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(initMatrix, 200);
+        });
+
+        // Combined alphabet: binary + katakana + english digits
+        const chars = "1010101011001100010101101010ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓ";
+        const charArray = chars.split("");
+
+        let lastTime = 0;
+        const fpsInterval = 1000 / 24; 
+        function render(timestamp) {
+            requestAnimationFrame(render);
+
+            const elapsed = timestamp - lastTime;
+            if (elapsed < fpsInterval) return;
+            lastTime = timestamp - (elapsed % fpsInterval);
+
+            // Semi-transparent black fill produces the trailing fade effect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.font = `800 ${fontSize}px 'JetBrains Mono', monospace`;
+
+            for (let i = 0; i < columns; i++) {
+                const char = charArray[Math.floor(Math.random() * charArray.length)];
+                const y = drops[i] * fontSize;
+
+                if (y > -fontSize) {
+                    if (Math.random() > 0.98) {
+                        // Glitch element: occasionally paint leading character white
+                        ctx.fillStyle = '#ffffff';
+                    } else if (brightStream[i]) {
+                        // Bright streams are lighter green
+                        ctx.fillStyle = '#b8ffc9';
+                    } else {
+                        // Standard stream color with its randomized opacity
+                        ctx.fillStyle = `rgba(94, 255, 119, ${streamOpacity[i]})`;
+                    }
+
+                    ctx.fillText(char, i * fontSize, y);
+                }
+
+                // Move drop down
+                drops[i] += speeds[i];
+
+                // Reset drop to top with randomized properties
+                if (y > height && Math.random() > 0.975) {
+                    drops[i] = -2;
+                    //speeds[i] = 0.8 + Math.random() * 1.5;
+                    speeds[i] = 0.125 + Math.random() * 0.25;
+                    streamOpacity[i] = 0.25 + Math.random() * 0.75;
+                    brightStream[i] = Math.random() < 0.15;
+                }
+            }
+        }
+        requestAnimationFrame(render);
+
+        // =========================================
+        // 3D MOUSE PARALLAX EFFECT
+        // =========================================
+        const wrapper = document.querySelector('.cinematic-wrapper');
+        const svg = document.querySelector('.cinematic-wrapper svg');
+        const btnContainer = document.querySelector('.btn-container');
+
+        if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+            document.addEventListener('mousemove', (e) => {
+                const xVal = (window.innerWidth / 2 - e.clientX) / 35; // Maximum angle of 10-15 degrees
+                const yVal = (window.innerHeight / 2 - e.clientY) / 35;
+
+                // Rotate SVG slightly in 3D space
+                if (svg) {
+                    svg.style.transform = `rotateY(${xVal}deg) rotateX(${-yVal}deg)`;
+                }
+                
+                // Tilt the button container slightly less to create parallax depth
+                if (btnContainer) {
+                    btnContainer.style.transform = `translateZ(20px) rotateY(${xVal * 0.5}deg) rotateX(${-yVal * 0.5}deg)`;
+                }
+            });
+
+            // Smoothly reset transformations when cursor leaves screen
+            document.addEventListener('mouseleave', () => {
+                if (svg) {
+                    svg.style.transform = 'rotateY(0deg) rotateX(0deg)';
+                }
+                if (btnContainer) {
+                    btnContainer.style.transform = 'translateZ(20px) rotateY(0deg) rotateX(0deg)';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>WalterDev-MATRIX DIGITAL</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet">
+
+    <style>
+
+        :root{
+            --duration:16s;
+            --matrix:#6dff7d;
+            --matrix2:#00ff66;
+            --matrix3:#d7ffe1;
+            --dark:#020402;
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            width:100%;
+            height:100vh;
+
+            overflow:hidden;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            background:
+                radial-gradient(circle at center,
+                #081108 0%,
+                #020402 45%,
+                #000000 100%);
+        }
+
+        /* =========================================
+           MATRIX CANVAS
+        ==========================================*/
+
+        #matrixCanvas{
+
+            position:fixed;
+
+            inset:0;
+
+            width:100%;
+            height:100%;
+
+            z-index:0;
+
+            pointer-events:none;
+
+            /* Restauramos la opacidad original para que las letras tengan ese brillo precioso */
+            opacity:.38;
+        }
+
+        /* =========================================
+           WRAPPER
+        ==========================================*/
+
+        .cinematic-wrapper{
+
+            position:relative;
+
+            z-index:2;
+
+            width:min(1300px,100vw);
+
+            opacity:0;
+
+            transform-origin:center;
+
+            animation:
+                cinematicIntro
+                var(--duration)
+                cubic-bezier(.7,0,.3,1)
+                infinite;
+        }
+
+        @keyframes cinematicIntro{
+
+            0%{
+
+                opacity:0;
+
+                transform:
+                    scale(.96)
+                    translateY(10px);
+
+                filter:
+                    brightness(0)
+                    blur(10px);
+            }
+
+            10%{
+                opacity:.06;
+            }
+
+            18%{
+
+                opacity:.28;
+
+                filter:
+                    brightness(.22)
+                    blur(6px);
+            }
+
+            28%{
+
+                opacity:1;
+
+                transform:
+                    scale(1)
+                    translateY(0);
+
+                filter:
+                    brightness(.9)
+                    blur(0px);
+            }
+
+            45%{
+
+                opacity:1;
+
+                filter:
+                    brightness(1.2);
+            }
+
+            70%{
+
+                opacity:.96;
+
+                transform:
+                    scale(1.01);
+            }
+
+            85%{
+
+                opacity:.4;
+
+                filter:
+                    brightness(.3)
+                    blur(2px);
+            }
+
+            100%{
+
+                opacity:0;
+
+                transform:
+                    scale(1.035)
+                    translateY(-4px);
+
+                filter:
+                    brightness(0)
+                    blur(8px);
+            }
+        }
+
+        /* =========================================
+           SVG
+        ==========================================*/
+
+        svg{
+
+            width:100%;
+            height:auto;
+
+            overflow:visible;
+
+            filter:
+                drop-shadow(0 0 10px rgba(0,255,100,.16))
+                drop-shadow(0 0 24px rgba(0,255,100,.12))
+                drop-shadow(0 0 60px rgba(0,255,100,.08))
+                drop-shadow(0 15px 20px rgba(0,0,0,.95));
+        }
+
+        text{
+
+            font-family:'JetBrains Mono', monospace;
+            font-weight:800;
+            letter-spacing:4px;
+
+            text-rendering:geometricPrecision;
+        }
+
+        .dark-layer{
+            opacity:.30;
+        }
+
+        .metal-layer{
+            opacity:1;
+        }
+
+        .reflection-layer{
+            opacity:1;
+        }
+
+        /* =========================================
+           DIGITAL FLICKER
+        ==========================================*/
+
+        .metal-layer text{
+
+            animation:
+                digitalFlicker 5s infinite;
+        }
+
+        @keyframes digitalFlicker{
+
+            0%,100%{
+                opacity:1;
+            }
+
+            2%{
+                opacity:.94;
+            }
+
+            4%{
+                opacity:1;
+            }
+
+            7%{
+                opacity:.96;
+            }
+
+            9%{
+                opacity:1;
+            }
+
+            52%{
+                opacity:.98;
+            }
+
+            54%{
+                opacity:.92;
+            }
+
+            56%{
+                opacity:1;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+<canvas id="matrixCanvas"></canvas>
+<div class="cinematic-wrapper">
+    <svg
+        viewBox="0 0 1400 520"
+        xmlns="http://www.w3.org/2000/svg">
+
+        <defs>
+            <path
+                id="arcPath"
+                d="M 120 310 Q 700 155 1280 310" />
+            <linearGradient
+                id="metalDark"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%">
+                <stop offset="0%" stop-color="#071807"/>
+                <stop offset="10%" stop-color="#0e300e"/>
+                <stop offset="24%" stop-color="#5dff78"/>
+                <stop offset="36%" stop-color="#124512"/>
+                <stop offset="50%" stop-color="#effff1"/>
+                <stop offset="64%" stop-color="#0d380d"/>
+                <stop offset="78%" stop-color="#7bff8d"/>
+                <stop offset="90%" stop-color="#124012"/>
+                <stop offset="100%" stop-color="#071807"/>
+            </linearGradient>
+            <linearGradient
+                id="chromeEdge"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="14%" stop-color="#7bff8f"/>
+                <stop offset="28%" stop-color="#134013"/>
+                <stop offset="40%" stop-color="#effff1"/>
+                <stop offset="54%" stop-color="#0b2a0b"/>
+                <stop offset="70%" stop-color="#66ff7f"/>
+                <stop offset="84%" stop-color="#173817"/>
+                <stop offset="100%" stop-color="#ffffff"/>
+            </linearGradient>
+            <linearGradient
+                id="matrixGlow"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="0%">
+                <stop offset="0%" stop-color="#00ff66"/>
+                <stop offset="25%" stop-color="#6dff7d"/>
+                <stop offset="50%" stop-color="#ffffff"/>
+                <stop offset="75%" stop-color="#6dff7d"/>
+                <stop offset="100%" stop-color="#00ff66"/>
+            </linearGradient>
+            <linearGradient
+                id="lightSweep"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="0%">
+                <stop offset="0%"
+                      stop-color="rgba(255,255,255,0)" />
+                <stop offset="42%"
+                      stop-color="rgba(255,255,255,0)" />
+                <stop offset="50%"
+                      stop-color="rgba(120,255,140,.95)" />
+                <stop offset="58%"
+                      stop-color="rgba(255,255,255,0)" />
+                <stop offset="100%"
+                      stop-color="rgba(255,255,255,0)" />
+            </linearGradient>
+            <mask id="movingMask">
+                <rect
+                    width="1400"
+                    height="520"
+                    fill="black"/>
+                <rect
+                    x="-400"
+                    y="0"
+                    width="260"
+                    height="520"
+                    fill="url(#lightSweep)">
+                    <animate
+                        attributeName="x"
+                        from="-400"
+                        to="1700"
+                        dur="5s"
+                        repeatCount="indefinite"/>
+                </rect>
+                <rect
+                    x="-400"
+                    y="0"
+                    width="90"
+                    height="520"
+                    fill="white"
+                    opacity=".25">
+                    <animate
+                        attributeName="x"
+                        from="-400"
+                        to="1700"
+                        dur="5s"
+                        begin=".45s"
+                        repeatCount="indefinite"/>
+                </rect>
+            </mask>
+            <filter
+                id="softGlow"
+                x="-40%"
+                y="-40%"
+                width="180%"
+                height="180%">
+                <feGaussianBlur
+                    stdDeviation="4"
+                    result="blur"/>
+                <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+            <filter
+                id="thinGlow"
+                x="-40%"
+                y="-40%"
+                width="180%"
+                height="180%">
+                <feGaussianBlur
+                    stdDeviation="2"
+                    result="coloredBlur"/>
+                <feColorMatrix
+                    in="coloredBlur"
+                    type="matrix"
+
+                    values="
+                    0 0 0 0 0
+                    0 1 0 0 0
+                    0 0 0 0 0
+                    0 0 0 1 0"/>
+
+                <feMerge>
+                    <feMergeNode/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+        </defs>
+        <g class="dark-layer">
+            <text
+                font-size="120"
+                filter="url(#softGlow)">
+                <textPath
+                    href="#arcPath"
+                    startOffset="50%"
+                    text-anchor="middle">
+                    <tspan
+                        fill="#0b2a0b"
+                        stroke="#37c837"
+                        stroke-width="2.2">
+                        WALTER-DEV
+                    </tspan>
+                </textPath>
+            </text>
+        </g>
+        <g
+            class="metal-layer"
+            mask="url(#movingMask)"
+            filter="url(#thinGlow)">
+            <text font-size="125">
+                <textPath
+                    href="#arcPath"
+                    startOffset="50%"
+                    text-anchor="middle">
+                    <tspan
+                        fill="url(#metalDark)"
+                        stroke="url(#matrixGlow)"
+                        stroke-width="3.8"
+                        paint-order="stroke fill">
+                        WALTER-DEV
+                    </tspan>
+                </textPath>
+            </text>
+        </g>
+        <g
+            class="reflection-layer"
+            mask="url(#movingMask)">
+            <text
+                font-size="135">
+                <textPath
+                    href="#arcPath"
+                    startOffset="50%"
+                    text-anchor="middle">
+                    <tspan
+                        fill="none"
+                        stroke="#d7ffe1"
+                        stroke-opacity=".6"
+                        stroke-width="1.3">
+                        WALTER-DEV
+                    </tspan>
+                </textPath>
+            </text>
+          
+
+        </g>
+                <g
+            transform="translate(0,55)"
+            opacity="1">
+
+            <path
+                d="M 335 300 Q 700 205 1065 300"
+                fill="none"
+                stroke="url(#matrixGlow)"
+                stroke-width="4"
+                filter="url(#softGlow)"/>
+
+            <path
+                d="
+                M 335 300
+                L 335 316
+                L 550 316
+                A 5 5 0 0 0 555 311
+                A 5 5 0 0 0 550 306
+                L 460 306"
+
+                fill="none"
+                stroke="url(#matrixGlow)"
+                stroke-width="2.5"/>
+
+            <path
+                d="
+                M 1065 300
+                L 1065 316
+                L 850 316
+                A 5 5 0 0 1 845 311
+                A 5 5 0 0 1 850 306
+                L 940 306"
+
+                fill="none"
+                stroke="url(#matrixGlow)"
+                stroke-width="2.5"/>
+
+            <circle
+                cx="700"
+                cy="311"
+                r="5"
+                fill="#d7ffe1"
+                filter="url(#softGlow)"/>
+        </g>
+    </svg>
+</div>
+<script>
+const canvas = document.getElementById("matrixCanvas");
+const ctx = canvas.getContext("2d");
+function resizeCanvas(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+
+// Caracteres tipo Matrix (Katakana + Latín + Números)
+const chars = "アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const fontSize = 18;
+let columns = Math.floor(window.innerWidth / fontSize);
+let rainDrops = [];
+
+for(let i = 0; i < columns; i++){
+    rainDrops[i] = Math.random() * -100;
+}
+
+function drawMatrix(){
+    // IMPORTANTE: Quitamos la sombra antes de borrar para no ensuciar el fondo con brillo verde
+    ctx.shadowBlur = 0;
+    
+    // Oscurecemos el rastro un poco más rápido (0.2) para que el fondo del canvas 
+    // se mantenga bien negro, dejando resaltar tu logo WALTER-DEV
+    ctx.fillStyle = "rgba(0,0,0,0.2)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    
+    ctx.font = fontSize + "px JetBrains Mono";
+    
+    for(let i = 0; i < rainDrops.length; i++){
+        const text =
+            chars.charAt(
+                Math.floor(Math.random() * chars.length)
+            );
+        const x = i * fontSize;
+        const y = rainDrops[i] * fontSize;
+        const glow =
+            Math.random() > 0.985;
+            
+        // Los colores y brillos originales de las letras vuelven a su esplendor aquí
+        if(glow){
+            ctx.fillStyle = "#d7ffe1";
+            ctx.shadowColor = "#d7ffe1";
+            ctx.shadowBlur = 22;
+        }else{
+            ctx.fillStyle = "#00ff66";
+            ctx.shadowColor = "#00ff66";
+            ctx.shadowBlur = 12;
+        }
+        
+        ctx.fillText(text, x, y);
+        
+        if(y > canvas.height && Math.random() > 0.975){
+            rainDrops[i] = 0;
+        }
+        rainDrops[i]++;
+    }
+}
+
+// 60ms para la caída lenta y natural
+setInterval(drawMatrix, 60);
+
+window.addEventListener("resize", () => {
+    resizeCanvas();
+    columns = Math.floor(window.innerWidth / fontSize);
+    rainDrops = [];
+    for(let i = 0; i < columns; i++){
+        rainDrops[i] = Math.random() * -100;
+    }
+});
+</script>
+</body>
+</html>
